@@ -1,0 +1,12 @@
+# macOS metadata
+.DS_Store
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# Java build output
+*.class
+out/
+build/
+target/
