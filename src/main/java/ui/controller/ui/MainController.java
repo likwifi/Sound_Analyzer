@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 
 public class MainController {
     @FXML
@@ -31,7 +32,7 @@ public class MainController {
     @FXML
     public Tab spectrogramTab;
     @FXML
-    private TreeView treeView;
+    private TreeView<String> treeView;
     @FXML
     private ToolBar audioToolbar;
     @FXML
@@ -59,15 +60,15 @@ public class MainController {
 
     private void fillTree(File rootDir) {
         File[] files = rootDir.listFiles();
-        TreeItem<String> root = new TreeItem<>(rootDir.getParentFile().getName());
+        TreeItem<String> root = new TreeItem<>(rootDir.getName());
         root.setExpanded(true);
-        for (int i = 0; i < files.length; i++) {
-            String name = files[i].getName();
-            if (name.endsWith(".wav") || name.endsWith(".png") || name.endsWith(".jpg")) {
-                TreeItem<String> item = new TreeItem<String>(name);
-                root.getChildren().add(item);
+        if (files != null) {
+            for (File file : files) {
+                if (isSupportedFile(file)) {
+                    TreeItem<String> item = new TreeItem<>(file.getName());
+                    root.getChildren().add(item);
+                }
             }
-
         }
         if (root.getChildren().size() == 0) {
             Popup.showMessage("No image or audio files found", this.stage, true);
@@ -78,22 +79,18 @@ public class MainController {
 
     @FXML
     private void handleTreeItemClick(Event e) throws IOException, UnsupportedAudioFileException {
-        TreeItem<?> selectedItem = (TreeItem<?>) treeView.getSelectionModel().getSelectedItems().get(0);
-        if (selectedItem == null)
+        TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem == null || selectedItem == treeView.getRoot())
             return;
-        File path = new File(this.rootDir.getAbsolutePath() + "\\" + selectedItem.getValue());
+        File path = new File(this.rootDir, selectedItem.getValue());
 
-        if (this.selectedPath != null && (/*this.selectedPath.equals(path) || */!this.selectedPath.isFile()))
+        if (!path.isFile())
             return;
 
         this.selectedPath = path;
 
         // trying to threat path as wav audio
-        AudioInputStream selectedAudio =  null;
-        try {
-            selectedAudio = AudioWaveformReader.getAudio(this.selectedPath);
-        } catch (Exception audioReadException) {}
-        if (selectedAudio != null) {
+        try (AudioInputStream selectedAudio = AudioWaveformReader.getAudio(this.selectedPath)) {
             hideFrequencyToolbar();
             showAudioToolbar();
             spectrogramTab.setDisable(false);
@@ -102,15 +99,17 @@ public class MainController {
             // reading audios phonemeFile
             String name = this.selectedPath.getName();
             PhonemeList phn = null;
-            if (name.endsWith(".wav")) {
-                String absPath = this.selectedPath.getAbsolutePath();
-                File phonemeFile = new File(absPath.split(".wav")[0]+".phn");
+            if (name.toLowerCase(Locale.ROOT).endsWith(".wav")) {
+                String baseName = name.substring(0, name.lastIndexOf('.'));
+                File phonemeFile = new File(this.selectedPath.getParentFile(), baseName + ".phn");
                 if (phonemeFile.exists()) {
                     phn = new PhonemeList(phonemeFile);
                 }
             }
             soundController.setActive(audioData, phn);
             return;
+        } catch (UnsupportedAudioFileException audioReadException) {
+            // The selected file may be an image; try decoding it below.
         }
 
         // trying to threat path as an image
@@ -126,6 +125,13 @@ public class MainController {
             return;
         }
         Popup.showMessage("Please select image or .wav file", this.stage, true);
+    }
+
+    private boolean isSupportedFile(File file) {
+        if (!file.isFile())
+            return false;
+        String name = file.getName().toLowerCase(Locale.ROOT);
+        return name.endsWith(".wav") || name.endsWith(".png") || name.endsWith(".jpg");
     }
 
     private void showAudioToolbar() {
