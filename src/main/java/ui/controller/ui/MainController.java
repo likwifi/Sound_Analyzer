@@ -24,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class MainController {
@@ -63,6 +65,7 @@ public class MainController {
         TreeItem<String> root = new TreeItem<>(rootDir.getName());
         root.setExpanded(true);
         if (files != null) {
+            Arrays.sort(files, Comparator.comparing(file -> file.getName().toLowerCase(Locale.ROOT)));
             for (File file : files) {
                 if (isSupportedFile(file)) {
                     TreeItem<String> item = new TreeItem<>(file.getName());
