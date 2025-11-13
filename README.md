@@ -18,7 +18,7 @@ Sound Analyzer is a Java desktop application for exploring audio and image signa
 
 ### Image analysis
 
-- Load `.png` and `.jpg` images.
+- Load `.png`, `.jpg`, and `.jpeg` images.
 - Convert images to grayscale for frequency analysis.
 - Display a two-dimensional frequency spectrum using OpenCV's DFT.
 - Select a rectangular frequency region and reconstruct the filtered image with an inverse DFT.

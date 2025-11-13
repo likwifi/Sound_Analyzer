@@ -34,7 +34,8 @@ public class Picker extends Component {
             @Override
             public boolean accept(File f) {
                 String name = f.getName().toLowerCase();
-                return f.isDirectory() ? true : name.endsWith(".wav") || name.endsWith(".jpg") || name.endsWith(".png");
+                return f.isDirectory() ? true : name.endsWith(".wav") || name.endsWith(".jpg")
+                        || name.endsWith(".jpeg") || name.endsWith(".png");
             }
 
             @Override

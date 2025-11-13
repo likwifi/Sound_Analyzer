@@ -134,7 +134,8 @@ public class MainController {
         if (!file.isFile())
             return false;
         String name = file.getName().toLowerCase(Locale.ROOT);
-        return name.endsWith(".wav") || name.endsWith(".png") || name.endsWith(".jpg");
+        return name.endsWith(".wav") || name.endsWith(".png")
+                || name.endsWith(".jpg") || name.endsWith(".jpeg");
     }
 
     private void showAudioToolbar() {
