@@ -2,7 +2,6 @@ package ui.utils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
@@ -29,7 +28,6 @@ public class Picker extends Component {
         JFileChooser j = new JFileChooser();
         j.setCurrentDirectory(initialDir);
         j.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES/*OPEN_DIALOG*//*DIRECTORIES_ONLY*/);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Wav or Image file", "*.jpg", ".jpg", "jpg", "png", "wav");
         j.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
