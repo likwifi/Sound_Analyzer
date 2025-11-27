@@ -11,12 +11,24 @@ public class PhonemeList {
     private List<Phoneme> phonemes;
 
     public PhonemeList(File phonemeFile) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(phonemeFile));
         phonemes = new ArrayList<>();
-        String line;
-        while ((line = in.readLine()) != null) {
-            String[] split = line.split(" ");
-            phonemes.add(new Phoneme(Integer.valueOf(split[0]),Integer.valueOf(split[1]), split[2]));
+        try (BufferedReader in = new BufferedReader(new FileReader(phonemeFile))) {
+            String line;
+            int lineNumber = 0;
+            while ((line = in.readLine()) != null) {
+                lineNumber++;
+                line = line.trim();
+                if (line.isEmpty())
+                    continue;
+                String[] fields = line.split("\\s+");
+                if (fields.length < 3)
+                    throw new IOException("Invalid phoneme annotation at line " + lineNumber);
+                try {
+                    phonemes.add(new Phoneme(Integer.parseInt(fields[0]), Integer.parseInt(fields[1]), fields[2]));
+                } catch (NumberFormatException exception) {
+                    throw new IOException("Invalid phoneme sample index at line " + lineNumber, exception);
+                }
+            }
         }
     }
 
