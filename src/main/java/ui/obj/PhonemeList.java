@@ -8,10 +8,9 @@ import java.util.List;
  * Created by Minas on 5/7/2017.
  */
 public class PhonemeList {
-    private List<Phoneme> phonemes;
+    private final List<Phoneme> phonemes = new ArrayList<>();
 
     public PhonemeList(File phonemeFile) throws IOException {
-        phonemes = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(phonemeFile))) {
             String line;
             int lineNumber = 0;
