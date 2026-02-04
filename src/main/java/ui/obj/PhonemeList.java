@@ -2,6 +2,7 @@ package ui.obj;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,6 +33,6 @@ public class PhonemeList {
     }
 
     public List<Phoneme> getPhonemesList() {
-        return this.phonemes;
+        return Collections.unmodifiableList(this.phonemes);
     }
 }
