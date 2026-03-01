@@ -3,6 +3,7 @@ package audio;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -21,8 +22,13 @@ public class AudioWaveformReader {
     public static double[] readAudio(AudioInputStream audioInputStream) throws IOException, UnsupportedAudioFileException {
 //        File sound = new File("src\\ta-ta.wav");
 
-        byte[] bytes = new byte[(int) (audioInputStream.getFrameLength()) * (audioInputStream.getFormat().getFrameSize())];
-        audioInputStream.read(bytes);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        while ((bytesRead = audioInputStream.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        byte[] bytes = output.toByteArray();
 
         double[] audioData = new double[bytes.length/2];
         for (int i = 0; i < bytes.length/2; i++) {
