@@ -1,5 +1,6 @@
 package audio;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -21,6 +22,13 @@ public class AudioWaveformReader {
     }
     public static double[] readAudio(AudioInputStream audioInputStream) throws IOException, UnsupportedAudioFileException {
 //        File sound = new File("src\\ta-ta.wav");
+
+        AudioFormat format = audioInputStream.getFormat();
+        if (!AudioFormat.Encoding.PCM_SIGNED.equals(format.getEncoding())
+                || format.getSampleSizeInBits() != 16
+                || format.isBigEndian()) {
+            throw new UnsupportedAudioFileException("Only 16-bit little-endian signed PCM audio is supported");
+        }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         byte[] buffer = new byte[8192];
