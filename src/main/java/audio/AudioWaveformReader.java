@@ -37,6 +37,9 @@ public class AudioWaveformReader {
             output.write(buffer, 0, bytesRead);
         }
         byte[] bytes = output.toByteArray();
+        if (bytes.length % format.getFrameSize() != 0) {
+            throw new IOException("Audio stream ended with an incomplete frame");
+        }
 
         double[] audioData = new double[bytes.length/2];
         for (int i = 0; i < bytes.length/2; i++) {
