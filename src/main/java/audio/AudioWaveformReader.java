@@ -7,9 +7,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Created by Minas on 2/22/2017.
@@ -21,8 +18,6 @@ public class AudioWaveformReader {
         return ai;
     }
     public static double[] readAudio(AudioInputStream audioInputStream) throws IOException, UnsupportedAudioFileException {
-//        File sound = new File("src\\ta-ta.wav");
-
         AudioFormat format = audioInputStream.getFormat();
         if (!AudioFormat.Encoding.PCM_SIGNED.equals(format.getEncoding())
                 || format.getSampleSizeInBits() != 16
