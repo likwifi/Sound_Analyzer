@@ -63,7 +63,6 @@ public class SoundController {
                 } catch (Exception e) {
                     e.printStackTrace();
                     Platform.runLater(() -> dialog.close());
-                    this.stop();
                 }
             }
         };
@@ -104,7 +103,8 @@ public class SoundController {
                     Core.dft(data, data);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    this.stop();
+                    Platform.runLater(() -> dialog.close());
+                    return;
                 }
                 final double[] psd = new double[audioData.length];
                 // calculating magnitude
