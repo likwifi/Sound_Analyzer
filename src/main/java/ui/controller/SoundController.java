@@ -51,7 +51,7 @@ public class SoundController {
         redrawSpectrogram = false;
         SoundController me = this;
         // TODO replace this with javafx Task
-       Thread t = new Thread() {
+       Thread t = new Thread("spectrogram-calculation") {
             public void run() {
                 try {
                     Spectrogram spectrogram = new Spectrogram(audioData, 30, me.ui.Fps);
@@ -66,6 +66,7 @@ public class SoundController {
                 }
             }
         };
+        t.setDaemon(true);
         t.start();
     }
 
@@ -95,7 +96,7 @@ public class SoundController {
 
         redrawFFT = false;
         // TODO replace this with javafx Task
-        Thread t = new Thread() {
+        Thread t = new Thread("fft-calculation") {
             public void run() {
                 Mat data = MatUtils.complex(audioData);
 
@@ -117,6 +118,7 @@ public class SoundController {
                 });
             }
         };
+        t.setDaemon(true);
         t.start();
     }
 
