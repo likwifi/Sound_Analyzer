@@ -91,6 +91,8 @@ public class SoundController {
     }
 
     public void plotFFT() {
+        if (audioData == null)
+            return;
         // TODO add maven support add opencv
         final Stage dialog = Popup.showMessage("Calculating frequency spectrum...", this.ui.stage, false);
 
