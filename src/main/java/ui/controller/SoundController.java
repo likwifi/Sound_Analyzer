@@ -111,7 +111,7 @@ public class SoundController {
                 }
                 final double[] psd = new double[audioData.length];
                 // calculating magnitude
-                for (int i = 0; i < audioData.length - 1; i++) {
+                for (int i = 0; i < audioData.length; i++) {
                     psd[i] = Math.sqrt(Math.pow(data.get(0, i)[0], 2) + Math.pow(data.get(0, i)[1], 2));
                 }
                 Platform.runLater(() -> {
