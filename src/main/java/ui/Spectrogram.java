@@ -32,11 +32,18 @@ public class Spectrogram {
     }
 
     public Spectrogram(double[] audioData, int windowInMs, float fps, float overlap) {
+        if (audioData == null || audioData.length == 0)
+            throw new IllegalArgumentException("Audio data must not be empty");
+        if (windowInMs <= 0 || fps <= 0)
+            throw new IllegalArgumentException("Window length and frame rate must be positive");
+        if (overlap < 0 || overlap >= 1)
+            throw new IllegalArgumentException("Overlap must be between 0 (inclusive) and 1 (exclusive)");
+
         this.overlap = overlap;
         this.audioData = audioData;
         this.fps = fps;
 
-        int binSize = (int) Math.round(fps * windowInMs / 1000);
+        int binSize = Math.max(2, (int) Math.round(fps * windowInMs / 1000));
         binSize = binSize % 2 == 0 ? binSize : binSize - 1;
         this.binSize = binSize;
         int size = (int) Math.ceil(audioData.length / binSize);
