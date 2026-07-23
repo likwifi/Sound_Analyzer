@@ -46,10 +46,10 @@ public class Spectrogram {
         int binSize = Math.max(2, (int) Math.round(fps * windowInMs / 1000));
         binSize = binSize % 2 == 0 ? binSize : binSize - 1;
         this.binSize = binSize;
-        int size = (int) Math.ceil(audioData.length / binSize);
+        int size = (audioData.length + binSize - 1) / binSize;
 
-        psdComplex = new Mat[size+1];
-        double[][] psd = this.psd = new double[size + 1][binSize];
+        psdComplex = new Mat[size];
+        double[][] psd = this.psd = new double[size][binSize];
 
         int i = 0;
         for (int j = 0; j < audioData.length; j += binSize) {
