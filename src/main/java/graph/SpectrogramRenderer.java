@@ -62,7 +62,7 @@ public class SpectrogramRenderer {
             int x = i * singleXInt;
 
             for (int j = 0; j < frequencies.length; j++) {
-                int y = (frequencies.length - j) * singleYInt;
+                int y = (frequencies.length - j - 1) * singleYInt;
                 int dy = singleYInt;
                 double frequency = frequencies[j];
                 if (monochromatic) {
