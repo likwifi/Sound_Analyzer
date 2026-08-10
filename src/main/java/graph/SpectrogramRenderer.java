@@ -42,6 +42,7 @@ public class SpectrogramRenderer {
         double[] frequencyExtremes = RollupUtils.findExtremes(rolledMatrix);
         double minFreq = frequencyExtremes[0];
         double maxFreq = frequencyExtremes[1];
+        double frequencyRange = maxFreq - minFreq;
 
         double singleX = Math.max((double) width / rolledMatrix.length, 1);
         double singleY = (double) height / rolledMatrix[0].length;
@@ -65,10 +66,11 @@ public class SpectrogramRenderer {
                 int y = (frequencies.length - j - 1) * singleYInt;
                 int dy = singleYInt;
                 double frequency = frequencies[j];
+                double intensity = frequencyRange == 0 ? 0 : (frequency - minFreq) / frequencyRange;
                 if (monochromatic) {
-                    g.setColor(new Color(255, 0, 0, (int) Math.round(255d * (frequency - minFreq) / (maxFreq - minFreq))));
+                    g.setColor(new Color(255, 0, 0, (int) Math.round(255d * intensity)));
                 } else {
-                    g.setColor(mixColors(start, end, (frequency - minFreq) / (maxFreq - minFreq)));
+                    g.setColor(mixColors(start, end, intensity));
                 }
                 g.fillRect(x, y, singleXInt, dy);
             }
